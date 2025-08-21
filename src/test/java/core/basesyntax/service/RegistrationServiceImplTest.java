@@ -24,7 +24,7 @@ class RegistrationServiceImplTest {
     }
 
     @Test
-    void register_validUser_Ok() {
+    void register_validUser_Ok() throws RegistrationException {
         User user = new User();
         user.setLogin(VALID_LOGIN);
         user.setPassword(VALID_PASSWORD);
@@ -39,10 +39,10 @@ class RegistrationServiceImplTest {
     }
 
     @Test
-    void register_passwordLength6_Ok() {
+    void register_passwordLength6_Ok() throws RegistrationException {
         User user = new User();
         user.setLogin("login123");
-        user.setPassword("abcdef"); // edge case: 6 символів
+        user.setPassword("abcdef");
         user.setAge(25);
 
         User registered = registrationService.register(user);
@@ -51,11 +51,11 @@ class RegistrationServiceImplTest {
     }
 
     @Test
-    void register_age18_Ok() {
+    void register_age18_Ok() throws RegistrationException {
         User user = new User();
         user.setLogin("user18");
         user.setPassword("password");
-        user.setAge(MIN_AGE); // edge case: 18 років
+        user.setAge(MIN_AGE);
 
         User registered = registrationService.register(user);
         assertEquals(MIN_AGE, registered.getAge());
@@ -115,7 +115,7 @@ class RegistrationServiceImplTest {
     void register_passwordLength5_notOk() {
         User user = new User();
         user.setLogin(VALID_LOGIN);
-        user.setPassword("abcde"); // edge case: 5 символів
+        user.setPassword("abcde");
         user.setAge(25);
 
         assertThrows(RegistrationException.class,
@@ -161,10 +161,10 @@ class RegistrationServiceImplTest {
         existing.setLogin("duplicateLogin");
         existing.setPassword("pass1234");
         existing.setAge(25);
-        Storage.people.add(existing); // додаємо напряму
+        Storage.people.add(existing);
 
         User newUser = new User();
-        newUser.setLogin("duplicateLogin"); // той самий логін
+        newUser.setLogin("duplicateLogin");
         newUser.setPassword("anotherPass");
         newUser.setAge(30);
 
