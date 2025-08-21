@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import core.basesyntax.db.Storage;
 import core.basesyntax.exception.RegistrationException;
 import core.basesyntax.model.User;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,6 +21,10 @@ class RegistrationServiceImplTest {
     @BeforeEach
     void setUp() {
         registrationService = new RegistrationServiceImpl();
+    }
+
+    @AfterEach
+    void tearDown() {
         Storage.people.clear();
     }
 
@@ -33,9 +38,9 @@ class RegistrationServiceImplTest {
         User registered = registrationService.register(user);
 
         assertNotNull(registered.getId());
-        assertEquals(VALID_LOGIN, registered.getLogin());
-        assertEquals(VALID_PASSWORD, registered.getPassword());
-        assertEquals(30, registered.getAge());
+        assertEquals(user.getLogin(), registered.getLogin());
+        assertEquals(user.getPassword(), registered.getPassword());
+        assertEquals(user.getAge(), registered.getAge());
     }
 
     @Test
@@ -47,7 +52,7 @@ class RegistrationServiceImplTest {
 
         User registered = registrationService.register(user);
         assertNotNull(registered.getId());
-        assertEquals("abcdef", registered.getPassword());
+        assertEquals(user.getPassword(), registered.getPassword());
     }
 
     @Test
@@ -58,7 +63,7 @@ class RegistrationServiceImplTest {
         user.setAge(MIN_AGE);
 
         User registered = registrationService.register(user);
-        assertEquals(MIN_AGE, registered.getAge());
+        assertEquals(user.getAge(), registered.getAge());
     }
 
     @Test
@@ -81,7 +86,7 @@ class RegistrationServiceImplTest {
     @Test
     void register_loginTooShort_notOk() {
         User user = new User();
-        user.setLogin("abc"); // менше 6 символів
+        user.setLogin("abc");
         user.setPassword(VALID_PASSWORD);
         user.setAge(25);
 
@@ -104,7 +109,7 @@ class RegistrationServiceImplTest {
     void register_passwordTooShort_notOk() {
         User user = new User();
         user.setLogin(VALID_LOGIN);
-        user.setPassword("abc"); // 3 символи
+        user.setPassword("abc");
         user.setAge(25);
 
         assertThrows(RegistrationException.class,
