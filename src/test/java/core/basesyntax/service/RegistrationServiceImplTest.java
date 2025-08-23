@@ -38,9 +38,7 @@ class RegistrationServiceImplTest {
         User registered = registrationService.register(user);
 
         assertNotNull(registered.getId());
-        assertEquals(user.getLogin(), registered.getLogin());
-        assertEquals(user.getPassword(), registered.getPassword());
-        assertEquals(user.getAge(), registered.getAge());
+        assertEquals(user, registered);
     }
 
     @Test
@@ -51,8 +49,9 @@ class RegistrationServiceImplTest {
         user.setAge(25);
 
         User registered = registrationService.register(user);
+
         assertNotNull(registered.getId());
-        assertEquals(user.getPassword(), registered.getPassword());
+        assertEquals(user, registered);
     }
 
     @Test
@@ -63,7 +62,9 @@ class RegistrationServiceImplTest {
         user.setAge(MIN_AGE);
 
         User registered = registrationService.register(user);
-        assertEquals(user.getAge(), registered.getAge());
+
+        assertNotNull(registered.getId());
+        assertEquals(user, registered);
     }
 
     @Test
